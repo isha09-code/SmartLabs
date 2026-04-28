@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Labs</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #5f7cff, #43e97b);
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 25px;
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .image-row img {
+            width: 250px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .login-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            border-radius: 20px;
+            width: 420px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        input {
+            padding: 12px !important;
+            border-radius: 10px !important;
+        }
+
+        .btn-login {
+            background: #111827;
+            color: white;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .btn-login:hover {
+            background: black;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Welcome to JIS School</h1>
+    <p>Kolkata | PIN: 700001</p>
+</div>
+
+<div class="image-row">
+    <img src="https://images.unsplash.com/photo-1588072432836-e10032774350">
+    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754">
+    <img src="https://images.unsplash.com/photo-1596495578065-6e0763fa1178">
+</div>
+
+<div class="login-container">
+    <div class="login-card">
+
+        <h4 class="text-center mb-4">🔐 Lab Management System</h4>
+
+        <!-- 🔔 ERROR MESSAGE -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- 👤 NAME -->
+            <div class="mb-3">
+                <input type="text" name="user_id" class="form-control" placeholder="Enter Name" required>
+            </div>
+
+            <!-- 🔒 PASSWORD -->
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
+            </div>
+
+            <button type="submit" class="btn btn-login w-100">Login</button>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

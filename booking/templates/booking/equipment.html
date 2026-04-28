@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab Inventory | JIS School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body {
+            background: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar-custom {
+            background: #1e3a8a;
+            padding: 15px;
+            color: white;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .category-pill {
+            border-radius: 30px;
+            padding: 8px 20px;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+        }
+
+        .category-pill:hover, .category-pill.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .equipment-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            transition: 0.3s ease;
+            overflow: hidden;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+        }
+
+        .icon-box {
+            height: 60px;
+            width: 60px;
+            background: #eff6ff;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+            color: #3b82f6;
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .free-timer {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar-custom shadow-sm mb-4">
+    <div class="container d-flex justify-content-between align-items-center">
+        <h4 class="m-0"><i class="fas fa-microscope me-2"></i> JIS Lab Portal</h4>
+        <div>
+            <a href="{% url 'history' %}" class="btn btn-light btn-sm rounded-pill px-3 me-2">History</a>
+            <a href="/logout/" class="btn btn-outline-light btn-sm rounded-pill px-3">Logout</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    
+    <div class="alert bg-white border-0 shadow-sm d-flex align-items-center mb-4" style="border-radius: 15px;">
+        <div class="ms-3">
+            <small class="text-muted d-block">LAB ASSISTANT</small>
+            <strong>Ms. Ronita Ray</strong> <span class="mx-2">|</span> <i class="fas fa-phone-alt me-1"></i> 8240677016
+        </div>
+        <div class="ms-auto text-end">
+            <a href="{% url 'book_lab' %}" class="btn btn-primary rounded-pill btn-sm">
+                <i class="fas fa-door-open me-1"></i> Faculty Lab Booking
+            </a>
+        </div>
+    </div>
+
+    <div class="text-center mb-5">
+        <a href="{% url 'home' %}" class="category-pill {% if not request.GET.category %}active{% endif %}">All</a>
+        <a href="?category=physics" class="category-pill {% if request.GET.category == 'physics' %}active{% endif %}"><i class="fas fa-atom me-1"></i> Physics</a>
+        <a href="?category=chemistry" class="category-pill {% if request.GET.category == 'chemistry' %}active{% endif %}"><i class="fas fa-flask me-1"></i> Chemistry</a>
+        <a href="?category=biology" class="category-pill {% if request.GET.category == 'biology' %}active{% endif %}"><i class="fas fa-dna me-1"></i> Biology</a>
+        <a href="?category=computer" class="category-pill {% if request.GET.category == 'computer' %}active{% endif %}"><i class="fas fa-laptop-code me-1"></i> Computer</a>
+        <a href="?category=geography" class="category-pill {% if request.GET.category == 'geography' %}active{% endif %}"><i class="fas fa-globe-americas me-1"></i> Geography</a>
+    </div>
+
+    <div class="row">
+        {% for i in data %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card equipment-card shadow-sm p-4 text-center">
+                <div class="icon-box">
+                    {% if i.category == 'physics' %}<i class="fas fa-bolt"></i>
+                    {% elif i.category == 'chemistry' %}<i class="fas fa-vial"></i>
+                    {% elif i.category == 'biology' %}<i class="fas fa-leaf"></i>
+                    {% elif i.category == 'computer' %}<i class="fas fa-microchip"></i>
+                    {% else %}<i class="fas fa-map-marked-alt"></i>{% endif %}
+                </div>
+                
+                <h6 class="fw-bold mb-1">{{ i.name }}</h6>
+                <small class="text-muted d-block mb-3">{{ i.category|title }} Lab</small>
+
+                {% if i.available > 0 %}
+                    <span class="status-badge bg-success-subtle text-success border border-success-subtle">
+                        {{ i.available }} Units Left
+                    </span>
+                    <a href="{% url 'book_equipment' i.id %}" class="btn btn-primary w-100 rounded-pill mt-2">Book Slot</a>
+                {% else %}
+                    <span class="status-badge bg-danger-subtle text-danger border border-danger-subtle">
+                        Fully Occupied
+                    </span>
+                    {% if i.free_time %}
+                    <div class="free-timer mt-2">
+                        <i class="far fa-clock me-1"></i> Next: {{ i.free_time }}
+                    </div>
+                    {% endif %}
+                    <button class="btn btn-secondary w-100 rounded-pill mt-2" disabled>Waitlisted</button>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-search-minus fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No equipment found in this category.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>

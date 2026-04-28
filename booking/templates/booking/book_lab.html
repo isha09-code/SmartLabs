@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Full Lab</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg,#667eea,#764ba2);
+        }
+
+        .card {
+            border-radius: 15px;
+        }
+
+        input, select {
+            border-radius: 10px !important;
+        }
+
+        button {
+            border-radius: 10px !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5">
+    <div class="card p-4 shadow">
+
+        <h3 class="text-center mb-4">🏫 Book Full Lab</h3>
+
+        <!-- 🔔 Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Teacher Name -->
+            <div class="mb-3">
+                <label>Teacher Name</label>
+                <input type="text" name="teacher_name" class="form-control" required>
+            </div>
+
+            <!-- Lab Select -->
+            <div class="mb-3">
+                <label>Select Lab</label>
+                <select name="lab" class="form-control" required>
+                    <option value="physics">Physics Lab</option>
+                    <option value="chemistry">Chemistry Lab</option>
+                    <option value="biology">Biology Lab</option>
+                    <option value="computer">Computer Lab</option>
+                    <option value="geography">Geography Lab</option>
+                </select>
+            </div>
+
+            <!-- Date -->
+            <div class="mb-3">
+                <label>Date</label>
+                <input type="date" name="date" class="form-control" required>
+            </div>
+
+            <!-- Time -->
+            <div class="mb-3">
+                <label>Start Time</label>
+                <input type="time" name="time" class="form-control" required>
+            </div>
+
+            <!-- ✅ FIXED DURATION -->
+            <div class="mb-3">
+                <label>Duration (Minutes)</label>
+                <input type="number" name="duration"
+                       class="form-control"
+                       min="10" step="10"
+                       placeholder="e.g. 40, 60, 90"
+                       required>
+
+                <small class="text-muted">
+                    Enter time like 40, 60, 90 minutes
+                </small>
+            </div>
+
+            <button class="btn btn-primary w-100">
+                📅 Book Full Lab
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>
