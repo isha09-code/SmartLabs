@@ -1,2 +1,2 @@
 this is a project based on python
-mainly focused on booking laboratories 
+mainly focused on booking laboratories for students.
